@@ -24,9 +24,15 @@ public class CountryController {
 	CountryService countryService;
 	
 	@GetMapping("/getcountries")
-	public List<Country> getCountries(){
+	public ResponseEntity<List<Country>> getCountries(){
 		//return countryService.getAllCountries();
-		return countryService.getAllCountries();
+		try {
+			List<Country> countries =countryService.getAllCountries();
+			return new ResponseEntity <List<Country>>(countries,HttpStatus.FOUND);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 	
 	@GetMapping("/getcountries/{id}")
