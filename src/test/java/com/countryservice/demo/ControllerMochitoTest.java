@@ -102,7 +102,7 @@ public class ControllerMochitoTest {
 		//Mock 
 		when(countryService.getCountrybyID(countryID)).thenReturn(country);
 		when(countryService.updateCountry(country)).thenReturn(country);
-		//Execuate the controller
+		//Executte the controller
 		ResponseEntity<Country> res=countryController.updateCountry(countryID, country);
 		//Then
 		//Assert
