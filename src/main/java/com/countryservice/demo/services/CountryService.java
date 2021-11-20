@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.countryservice.demo.beans.Country;
-import com.countryservice.demo.controllers.AddResponse;
 import com.countryservice.demo.repositories.CountryRepository;
 
 @Component
@@ -36,14 +35,23 @@ public class CountryService {
 		/*
 		 * List countries = new ArrayList(countryIdMap.values()); return countries;
 		 */
-		return countryrep.findAll();
+		List<Country> countries =countryrep.findAll();
+		return countries;
 	}
 	
 	public Country getCountrybyID(int id) {
 		/*
 		 * Country country =countryIdMap.get(id); return country;
 		 */	
-		return countryrep.findById(id).get();
+		//return countryrep.findById(id).get();
+		List<Country> countries =countryrep.findAll();
+		Country country=null;
+		for (Country con:countries) {
+			if (con.getId()==id) {
+				country=con;
+			}
+		}
+		return country;
 	}
 	
 	public Country getCountrybyName(String countryName) {
@@ -82,16 +90,18 @@ public class CountryService {
 		return country;
 	}
 	
-	public AddResponse deleteCountry(int id) {
+	//public void deleteCountry(Country country) {
+	public void deleteCountry(Country country) {
 		/*
 		 * countryIdMap.remove(id); AddResponse res = new AddResponse();
 		 * res.setMsg("Country deleted.."); res.setId(id); return res;
 		 */
-		countryrep.deleteById(id);
-		AddResponse res = new AddResponse();
-		res.setMsg("Country deleted..!!");
-		res.setId(id);
-		return res;
+		countryrep.delete(country);
+		/*
+		 * AddResponse res = new AddResponse(); res.setMsg("Country deleted..!!");
+		 * res.setId(id); return res;
+		 */
+		
 	}
 	
 	//Utility method to get max id

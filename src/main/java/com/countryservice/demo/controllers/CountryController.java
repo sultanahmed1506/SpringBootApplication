@@ -1,6 +1,7 @@
 package com.countryservice.demo.controllers;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,7 @@ public class CountryController {
 		//return countryService.getCountrybyID(id);
 		try {
 			Country country =countryService.getCountrybyID(id);
-			return new ResponseEntity<Country>(country,HttpStatus.OK);
+			return new ResponseEntity<Country>(country,HttpStatus.FOUND);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -53,7 +54,7 @@ public class CountryController {
 		//return countryService.getCountrybyName(countryName);
 		try {
 			Country country =countryService.getCountrybyName(countryName);
-			return new ResponseEntity<Country>(country,HttpStatus.OK);
+			return new ResponseEntity<Country>(country,HttpStatus.FOUND);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -61,9 +62,15 @@ public class CountryController {
 	}
 	
 	@PostMapping("/addcountry")
-	public Country addCountry(@RequestBody Country country) {
+	public ResponseEntity<Country> addCountry(@RequestBody Country country) {
 		
-		return countryService.addCountry(country);
+		try {
+			country =countryService.addCountry(country);
+			return new ResponseEntity<Country>(country,HttpStatus.CREATED);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		}
 	}
 	
 	@PutMapping("/updatecountry/{id}")
@@ -84,10 +91,19 @@ public class CountryController {
 	}
 	
 	@DeleteMapping("/deletecountry/{id}")
-	public AddResponse deleteCountry(@PathVariable(value="id") int id) {
+	public ResponseEntity<Country> deleteCountry(@PathVariable("id") int id) {
 		
 		//return countryService.deleteCountry(id);
-		return countryService.deleteCountry(id);
+		Country country = countryService.getCountrybyID(id) ;
+		
+		try {
+			countryService.getCountrybyID(id);
+			countryService.deleteCountry(country);
+		} catch (NoSuchElementException e) {
+			// TODO Auto-generated catch block
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<Country>(country,HttpStatus.OK);
 	}
 	
 	
