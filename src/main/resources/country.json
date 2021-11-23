@@ -1,0 +1,12 @@
+[
+    {
+        "id": 1,
+        "countryName": "Bangladesh",
+        "countryCapital": "Dhaka"
+    },
+    {
+        "id": 2,
+        "countryName": "USA",
+        "countryCapital": "Washington"
+    }
+]

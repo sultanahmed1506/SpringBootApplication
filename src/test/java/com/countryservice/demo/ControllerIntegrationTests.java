@@ -2,6 +2,9 @@ package com.countryservice.demo;
 
 import static org.junit.Assert.assertEquals;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import org.json.JSONException;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -25,20 +28,18 @@ public class ControllerIntegrationTests {
 
 	@Test
 	@Order(1)
-	void getAllCountriesIntegrationTest() throws JSONException {
+	void getAllCountriesIntegrationTest() throws Exception {
 		
-		String expected = "[\r\n" + 
-				"    {\r\n" + 
-				"        \"id\": 1,\r\n" + 
-				"        \"countryName\": \"Bangladesh\",\r\n" + 
-				"        \"countryCapital\": \"Dhaka\"\r\n" + 
-				"    },\r\n" + 
-				"    {\r\n" + 
-				"        \"id\": 2,\r\n" + 
-				"        \"countryName\": \"USA\",\r\n" + 
-				"        \"countryCapital\": \"Washington\"\r\n" + 
-				"    }\r\n" + 
-				"]";
+		String file = "src/main/resources/country.json";
+        String expected = readFileAsString(file);
+		
+		/*
+		 * String expected = "[\r\n" + "    {\r\n" + "        \"id\": 1,\r\n" +
+		 * "        \"countryName\": \"Bangladesh\",\r\n" +
+		 * "        \"countryCapital\": \"Dhaka\"\r\n" + "    },\r\n" + "    {\r\n" +
+		 * "        \"id\": 2,\r\n" + "        \"countryName\": \"USA\",\r\n" +
+		 * "        \"countryCapital\": \"Washington\"\r\n" + "    }\r\n" + "]";
+		 */
 		
 		String url = "http://localhost:8082/getcountries";
 		TestRestTemplate restTemplate = new TestRestTemplate();
@@ -181,5 +182,10 @@ public class ControllerIntegrationTests {
 		
 	}
 	
+	
+	public static String readFileAsString(String file)throws Exception
+    {
+        return new String(Files.readAllBytes(Paths.get(file)));
+    }
 	
 }
